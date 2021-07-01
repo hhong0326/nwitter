@@ -1,42 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { authService, firebaseInstance } from 'fbase';
-
+import AuthForm from 'components/AuthForm';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTwitter,
+  faGoogle,
+  faGithub,
+} from "@fortawesome/free-brands-svg-icons";
 const Auth = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [newAccount, setNewAccount] = useState(true);
-    const [error, setError] = useState("");
-
-    const onChange = (event) => {
-        const {target: {name, value},} = event;
-        if (name === "email") {
-            setEmail(value);    
-        } else if (name === "password") {
-            setPassword(value);
-        }
-    }
-    
-    const onSubmit = async(event) => {
-        event.preventDefault();
-        try {
-            let data;
-            if(newAccount) {
-                data = await authService.createUserWithEmailAndPassword(
-                    email, password
-                );
-            } else {
-                data = await authService.signInWithEmailAndPassword(
-                    email, password
-                );
-            }
-
-            console.log(data);
-        } catch(error) {
-            setError(error.message);
-        }
-    }
-
-    const toggleAccount = () => setNewAccount((prev) => !prev);
 
     const onSocialClick = async (event) => {
         
@@ -52,25 +23,26 @@ const Auth = () => {
         }
 
         const data = await authService.signInWithPopup(provider);
-        console.log(data);
     }; 
 
     return (
-        <div>
-            <form onSubmit={onSubmit}>
-                <input name="email" type="email" placeholder="Email" required value={email} onChange={onChange}/>
-                <input name="password" type="password" placeholder="PW" required value={password} onChange={onChange}/>
-                <input type="submit" value={newAccount ? "Create Account" : "Sign in"} />
-                {error}
-            </form>
-            <span onClick={toggleAccount}>
-                {newAccount ? "Sign In" : "Create Account"}
-            </span>
+        <div className="authContainer">
+            <FontAwesomeIcon
+                icon={faTwitter}
+                color={"#04AAFF"}
+                size="3x"
+                style={{ marginBottom: 30 }}
+            />
             
+            <AuthForm />
 
-            <div>
-                <button name="google" onClick={onSocialClick}>Continue with Google</button>
-                <button name="github" onClick={onSocialClick}>Continue with Github</button>
+            <div className="authBtns">
+                <button onClick={onSocialClick} name="google" className="authBtn">
+                    Continue with Google <FontAwesomeIcon icon={faGoogle} />
+                </button>
+                <button onClick={onSocialClick} name="github" className="authBtn">
+                    Continue with Github <FontAwesomeIcon icon={faGithub} />
+                </button>
             </div>
         </div>
     )
