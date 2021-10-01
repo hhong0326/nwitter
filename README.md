@@ -1,2 +1,2 @@
 ## Cloning Twitter, Nwitter
-Practice ReactJS with firebase
+Learning ReactJS, firebase
